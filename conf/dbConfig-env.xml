@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<db-env>
+    <driverClassName>1</driverClassName>
+    <dbUrl>2</dbUrl>
+    <dbUserName>3</dbUserName>
+    <dbPassword>4</dbPassword>
+</db-env>

@@ -1,6 +1,4 @@
-package com.bjjh.MwssMan
-
-import org.apache.spark.sql.SparkSession
+package com.bjjh.MwssMan.main
 
 
 object main {

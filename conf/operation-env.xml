@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<operation-env>
+    <master>local</master>
+    <appName>Application of calculation strategy coverage and hit rate</appName>
+    <config key1=""></config>
+    <config key2=""></config>
+    <config key3=""></config>
+</operation-env>
