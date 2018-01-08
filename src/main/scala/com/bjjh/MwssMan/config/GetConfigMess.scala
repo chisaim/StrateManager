@@ -31,4 +31,29 @@ class GetConfigMess {
       getTagNameInDoc(document,"config").attribute("key1").getValue
     }
   */
+
+  def getDBUrl(): String = {
+    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "dbUrl")
+  }
+
+  def getDriverClassName(): String = {
+    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "driverClassName")
+  }
+
+  def getDbUserName(): String = {
+    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "dbUserName")
+  }
+
+  def getDbPassword(): String = {
+    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "dbPassword")
+  }
+
+  def getMaster(): String = {
+    getElementTextValue(getConfigFileDocument(configFile.getOperationFile()), "master")
+  }
+
+  def getAppName(): String = {
+    getElementTextValue(getConfigFileDocument(configFile.getOperationFile()), "appName")
+  }
+
 }
