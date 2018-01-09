@@ -4,4 +4,9 @@
     <dbUrl>jdbc:mysql://192.168.102.117:3306/site?characterEncoding=utf8&amp;allowMultiQueries=true&amp;useSSL=true</dbUrl>
     <dbUserName>chisaim</dbUserName>
     <dbPassword>chisaim</dbPassword>
+    <!--The following location is configured to compare the table names and column names of the columns.-->
+    <TabName1>customer</TabName1>
+    <tab1-col>customer_name</tab1-col>
+    <TabName2>customer</TabName2>
+    <tab2-col>customer_name</tab2-col>
 </db-env>
