@@ -4,7 +4,8 @@ import java.util.Properties
 
 import com.bjjh.MwssMan.config.GetConfigMess
 import com.bjjh.MwssMan.conn.GetContext
-import org.apache.spark.sql.Row
+import org.apache.spark.SparkContext
+import org.apache.spark.sql.{DataFrameReader, Row}
 import org.apache.spark.sql.types._
 
 import scala.collection.mutable
@@ -25,7 +26,6 @@ object main {
   }
 
 
-
   def main(args: Array[String]): Unit = {
     val session = context.getContext().getOrCreate()
 
@@ -37,11 +37,12 @@ object main {
 
     val messageIterator = data02.collectAsList().iterator()
 
-    var hitArray = new ArrayBuffer[Int]()
-    val hitArrayContent = new ArrayBuffer[Int]()
-    var missArray = new ArrayBuffer[Int]()
-    val missArrayContent = new ArrayBuffer[Int]()
+    var hitArray = new ArrayBuffer[Long]()
+    val hitArrayContent = new ArrayBuffer[Long]()
+    var missArray = new ArrayBuffer[Long]()
+    val missArrayContent = new ArrayBuffer[Long]()
 
+    val aa = Seq(ResultObj)
 
     while (strategyIterator.hasNext) {
       val strategy = strategyIterator.next().getString(0).r()
@@ -50,26 +51,24 @@ object main {
         if ((strategy findAllIn message).nonEmpty) {
           hitArray.+=(1)
         } else {
-          hitArray.+=(0)
+          missArray.+=(0)
         }
       }
       hitArrayContent += (hitArray.size)
       missArrayContent += (missArray.size)
+
+
+
     }
 
-    for(num <- 0 to hitArray.size -1){
-
-    }
-
-
-    val resultSchema:StructType = StructType(mutable.Seq(
-      StructField("hitResult",StringType,nullable = false),
-      StructField("missResult",StringType,nullable = false)
+    val resultSchema: StructType = StructType(mutable.Seq(
+      StructField("hitResult", StringType, nullable = false),
+      StructField("missResult", StringType, nullable = false)
     ))
 
-    val hitResult = hitArrayContent.foreach(value => {Row(value)})
+    val rdd = session.sparkContext.makeRDD(hitArrayContent.toList)
 
-//    val resultTable = session.createDataFrame(hitResult,resultSchema)
+//    val resultTable = session.sqlContext.createDataFrame(rdd, resultSchema)
 
     println("成功匹配结果:" + hitArray)
     println("失败匹配结果:" + missArray)
@@ -78,12 +77,9 @@ object main {
     println("hitContent:" + hitArrayContent.size)
     println("missContent:" + missArrayContent.size)
 
-
     session.close()
   }
 
-  val rex = (mess: String, strategy: String) => {
-    strategy.r() findAllIn mess
-  }
+  case class ResultObj(h: Long, m: Long)
 
 }
