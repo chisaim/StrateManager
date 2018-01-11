@@ -1,7 +1,9 @@
 package com.bjjh.MwssMan.main
 
 import java.util.Properties
+import java.util.concurrent.atomic.AtomicInteger
 
+import com.bjjh.MessMan.util.ConvertAndUtil
 import com.bjjh.MwssMan.config.GetConfigMess
 import com.bjjh.MwssMan.conn.GetContext
 import com.bjjh.MwssMan.mess.OrganTaskMessTab
@@ -10,6 +12,7 @@ import org.apache.spark.sql.types._
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
+import scala.util.matching.Regex.MatchIterator
 
 object main {
 
@@ -18,6 +21,8 @@ object main {
   val configMess = new GetConfigMess()
 
   val taskInfo = new OrganTaskMessTab()
+
+  val util = new ConvertAndUtil()
 
   def getProp(): Properties = {
 
@@ -38,25 +43,26 @@ object main {
     val missArray = new ArrayBuffer[Long]()
     val content = new ArrayBuffer[Row]()
 
-//    val seqNum
-
     while (strategyIterator.hasNext) {
       val strategy = strategyIterator.next().getString(0).r()
       while (messageIterator.hasNext) {
         val message = messageIterator.next().getString(0)
         if ((strategy findAllIn message).nonEmpty) {
+
           hitArray.+=(1)
         } else {
           missArray.+=(0)
         }
+        content += (Row(message, hitArray.size, hitArray.size + missArray.size))
       }
-      content += (Row(,hitArray.size, missArray.size))
     }
 
     val resultSchema: StructType = StructType(mutable.Seq(
-      StructField("taskInfo", LongType, nullable = false),
+      //      StructField("taskInfo", StringType, nullable = false),
+//      StructField("keyword", StringType, nullable = false),
+      StructField("message", StringType, nullable = false),
       StructField("hitResult", IntegerType, nullable = false),
-      StructField("missResult", IntegerType, nullable = false)
+      StructField("SumResult", IntegerType, nullable = false)
     ))
 
     val rdd = session.sparkContext.makeRDD(content.toList)
@@ -69,7 +75,7 @@ object main {
   }
 
 
-  def getDataSum(dataSum:DataFrame):Long = {
+  def getDataSum(dataSum: DataFrame): Long = {
     dataSum.count()
   }
 
