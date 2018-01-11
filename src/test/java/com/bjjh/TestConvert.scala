@@ -2,6 +2,7 @@ package com.bjjh
 
 import com.bjjh.MwssMan.conn.GetContext
 import org.junit.Test
+
 class TestConvert {
 
   case class AAA(n:Long,h:Long)

@@ -5,7 +5,7 @@ import java.util.Properties
 import com.bjjh.MwssMan.config.GetConfigMess
 import com.bjjh.MwssMan.conn.GetContext
 import org.apache.spark.SparkContext
-import org.apache.spark.sql.{DataFrameReader, Row}
+import org.apache.spark.sql.{DataFrameReader, Row, SaveMode}
 import org.apache.spark.sql.types._
 
 import scala.collection.mutable
@@ -38,11 +38,11 @@ object main {
     val messageIterator = data02.collectAsList().iterator()
 
     var hitArray = new ArrayBuffer[Long]()
-    val hitArrayContent = new ArrayBuffer[Long]()
+    val hitArrayContent = new ArrayBuffer[Row]()
     var missArray = new ArrayBuffer[Long]()
-    val missArrayContent = new ArrayBuffer[Long]()
+    val missArrayContent = new ArrayBuffer[Row]()
 
-    val aa = Seq(ResultObj)
+    val content = new ArrayBuffer[Row]()
 
     while (strategyIterator.hasNext) {
       val strategy = strategyIterator.next().getString(0).r()
@@ -54,32 +54,21 @@ object main {
           missArray.+=(0)
         }
       }
-      hitArrayContent += (hitArray.size)
-      missArrayContent += (missArray.size)
-
-
-
+      content += (Row(hitArray.size,missArray.size))
     }
 
     val resultSchema: StructType = StructType(mutable.Seq(
-      StructField("hitResult", StringType, nullable = false),
-      StructField("missResult", StringType, nullable = false)
+      StructField("hitResult", IntegerType, nullable = false),
+      StructField("missResult", IntegerType, nullable = false)
     ))
 
-    val rdd = session.sparkContext.makeRDD(hitArrayContent.toList)
+    val rdd = session.sparkContext.makeRDD(content.toList)
 
-//    val resultTable = session.sqlContext.createDataFrame(rdd, resultSchema)
+    val resultTable = session.sqlContext.createDataFrame(rdd, resultSchema)
 
-    println("成功匹配结果:" + hitArray)
-    println("失败匹配结果:" + missArray)
-    println("成功匹配结果容器:" + hitArrayContent)
-    println("失败匹配结果容器:" + missArrayContent)
-    println("hitContent:" + hitArrayContent.size)
-    println("missContent:" + missArrayContent.size)
+    resultTable.write.mode(SaveMode.Append).jdbc(configMess.getDBUrl(),"target",getProp())
 
     session.close()
   }
-
-  case class ResultObj(h: Long, m: Long)
 
 }
