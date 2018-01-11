@@ -5,8 +5,8 @@
     <dbUserName>chisaim</dbUserName>
     <dbPassword>chisaim</dbPassword>
     <!--The following location is configured to compare the table names and column names of the columns.-->
-    <TabName1>customer</TabName1>
-    <tab1-col>customer_name</tab1-col>
-    <TabName2>customer</TabName2>
-    <tab2-col>customer_name</tab2-col>
+    <StrategyTab>customer</StrategyTab>
+    <StrategyTab-col>customer_name</StrategyTab-col>
+    <MessageTab>customer</MessageTab>
+    <MessageTab-col>customer_name</MessageTab-col>
 </db-env>

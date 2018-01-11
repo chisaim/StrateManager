@@ -57,17 +57,17 @@ class GetConfigMess {
   }
 
   def getTabName1():String ={
-    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "TabName1")
+    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "StrategyTab")
   }
 
   def getTabName2():String ={
-    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "TabName2")
+    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "MessageTab")
   }
 
   def getTab1col():String = {
-    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "tab1-col")
+    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "StrategyTab-col")
   }
   def getTab2col():String = {
-    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "tab2-col")
+    getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "MessageTab-col")
   }
 }
