@@ -1,11 +1,14 @@
 package com.bjjh.MwssMan.config
 
+import java.util.Properties
 import org.dom4j.{Document, Element}
 import org.dom4j.io.SAXReader
 
 class GetConfigMess {
 
   val configFile = new GetConfigFile()
+
+  val configMess = new GetConfigMess()
 
   def getConfigFileDocument(filePath: String): Document = {
     val reader = new SAXReader()
@@ -70,4 +73,12 @@ class GetConfigMess {
   def getTab2col():String = {
     getElementTextValue(getConfigFileDocument(configFile.getDbConfigFile()), "MessageTab-col")
   }
+
+  def getProp(): Properties = {
+    val prop = new Properties()
+    prop.setProperty("user", configMess.getDbUserName())
+    prop.setProperty("password", configMess.getDbPassword())
+    prop
+  }
+
 }

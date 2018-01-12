@@ -12,7 +12,6 @@ import org.apache.spark.sql.types._
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
-import scala.util.matching.Regex.MatchIterator
 
 object main {
 
@@ -38,28 +37,34 @@ object main {
     val data02 = session.read.jdbc(configMess.getDBUrl(), configMess.getTabName2(), getProp()).select(configMess.getTab2col())
 
     val strategyIterator = data01.collectAsList().iterator()
+    val strategyList = data01.collectAsList()
     val messageIterator = data02.collectAsList().iterator()
-    val hitArray = new ArrayBuffer[Long]()
-    val missArray = new ArrayBuffer[Long]()
-    val content = new ArrayBuffer[Row]()
+    var content = new ArrayBuffer[Row]()
+    val content1 = new ArrayBuffer[ArrayBuffer[Row]]()
+
+    val hitNum = 0
+    val hitSum = 0
+
+
 
     while (strategyIterator.hasNext) {
-      val strategy = strategyIterator.next().getString(0).r()
+      val strategy = strategyIterator.next().getString(0)
+
       while (messageIterator.hasNext) {
         val message = messageIterator.next().getString(0)
-        if ((strategy findAllIn message).nonEmpty) {
-
-          hitArray.+=(1)
+        if ((strategy.r() findAllIn message).nonEmpty) {
+          content += (Row(message, strategy.toString(), hitNum + 1, hitSum + 1))
         } else {
-          missArray.+=(0)
+          content += (Row(message, strategy.toString(), hitNum + 0, hitSum + 1))
         }
-        content += (Row(message, hitArray.size, hitArray.size + missArray.size))
+        content1 += content
       }
     }
 
+
     val resultSchema: StructType = StructType(mutable.Seq(
       //      StructField("taskInfo", StringType, nullable = false),
-//      StructField("keyword", StringType, nullable = false),
+      StructField("keyword", StringType, nullable = false),
       StructField("message", StringType, nullable = false),
       StructField("hitResult", IntegerType, nullable = false),
       StructField("SumResult", IntegerType, nullable = false)
@@ -69,18 +74,9 @@ object main {
 
     val resultTable = session.sqlContext.createDataFrame(rdd, resultSchema)
 
-    resultTable.write.mode(SaveMode.Append).jdbc(configMess.getDBUrl(), "target", getProp())
+    //    resultTable.write.mode(SaveMode.Append).jdbc(configMess.getDBUrl(), "target", getProp())
 
     session.close()
   }
 
-
-  def getDataSum(dataSum: DataFrame): Long = {
-    dataSum.count()
-  }
-
-  def getTaskID(): Long = {
-    var num = 0
-    num + 1
-  }
 }
