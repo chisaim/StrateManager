@@ -63,7 +63,12 @@ object main {
     }
 
     val endStart = System.currentTimeMillis()
-    messContent += (Row(taskInfo.getTaskID(),strategyContent.size,messageContent.size,taskInfo.getStartTime(),taskInfo.getEndTime(),String.valueOf(endStart-startTime)+"ms"))
+    messContent += (Row(taskInfo.getTaskID(),
+      strategyContent.size,
+      messageContent.size,
+      taskInfo.getTime(),
+      taskInfo.getTime(),
+      String.valueOf(endStart-startTime)+"ms"))
     /*
         val data01 = session.read.jdbc(configMess.getDBUrl(), configMess.getTabName1(), configMess.getProp()).select(configMess.getTab1col())
         val data02 = session.read.jdbc(configMess.getDBUrl(), configMess.getTabName2(), configMess.getProp()).select(configMess.getTab2col())
