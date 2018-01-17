@@ -8,8 +8,6 @@ class GetConfigMess {
 
   val configFile = new GetConfigFile()
 
-  val configMess = new GetConfigMess()
-
   def getConfigFileDocument(filePath: String): Document = {
     val reader = new SAXReader()
     reader.read(filePath)
@@ -76,8 +74,8 @@ class GetConfigMess {
 
   def getProp(): Properties = {
     val prop = new Properties()
-    prop.setProperty("user", configMess.getDbUserName())
-    prop.setProperty("password", configMess.getDbPassword())
+    prop.setProperty("user",getDbUserName())
+    prop.setProperty("password",getDbPassword())
     prop
   }
 

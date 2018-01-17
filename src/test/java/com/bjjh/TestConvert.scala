@@ -10,7 +10,6 @@ class TestConvert {
 
   @Test
   def localDataToRDD() = {
-
   }
 
 }
