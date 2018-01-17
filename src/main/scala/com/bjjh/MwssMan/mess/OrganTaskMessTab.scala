@@ -7,23 +7,13 @@ class OrganTaskMessTab {
 
     def getTaskID(): String ={
 
-      val sdf = new SimpleDateFormat("yyyyMMddHHmmss")
-      val sdfdate = sdf.format(new Date())
-
-      return "DPC" + sdfdate
+      return "DPC" + getTime()
     }
 
-  def getStartTime() : String = {
+  def getTime() : String = {
     val sdf = new SimpleDateFormat("yyyyMMddHHmmss")
     val sdfdate = sdf.format(new Date())
-
-    return sdfdate
-  }
-  def getEndTime() : String = {
-    val sdf = new SimpleDateFormat("yyyyMMddHHmmss")
-    val sdfdate = sdf.format(new Date())
-
-    return sdfdate
+    sdfdate
   }
 
 }
