@@ -1,11 +1,10 @@
-package com.bjjh.MwssMan.main
+package com.bjjh.MessMan.main
 
 import java.sql.{DriverManager}
 
-import com.bjjh.MessMan.util.ConvertAndUtil
-import com.bjjh.MwssMan.config.GetConfigMess
-import com.bjjh.MwssMan.conn.GetContext
-import com.bjjh.MwssMan.mess.OrganTaskMessTab
+import com.bjjh.MessMan.config.GetConfigMess
+import com.bjjh.MessMan.conn.GetContext
+import com.bjjh.MessMan.mess.OrganTaskMessTab
 import org.apache.spark.sql.{Row, SaveMode}
 import org.apache.spark.sql.types._
 
@@ -19,8 +18,6 @@ object main {
   val configMess = new GetConfigMess()
 
   val taskInfo = new OrganTaskMessTab()
-
-  val util = new ConvertAndUtil()
 
   def main(args: Array[String]): Unit = {
 
@@ -52,23 +49,7 @@ object main {
       messageContent += (message.getString(configMess.getTab2col()))
     }
 
-    for (strate <- strategyContent) {
-      for (mess <- messageContent) {
-        if ((strate.r() findAllIn mess).nonEmpty) {
-          hitArray += 1
-        }
-      }
-      resultContent += (Row(taskInfo.getTaskID(), strate, hitArray.size))
-      hitArray.clear()
-    }
-
     val endStart = System.currentTimeMillis()
-    messContent += (Row(taskInfo.getTaskID(),
-      strategyContent.size,
-      messageContent.size,
-      taskInfo.getTime(),
-      taskInfo.getTime(),
-      String.valueOf(endStart-startTime)+"ms"))
     /*
         val data01 = session.read.jdbc(configMess.getDBUrl(), configMess.getTabName1(), configMess.getProp()).select(configMess.getTab1col())
         val data02 = session.read.jdbc(configMess.getDBUrl(), configMess.getTabName2(), configMess.getProp()).select(configMess.getTab2col())
@@ -98,11 +79,11 @@ object main {
 
     val taskMessSchema: StructType = StructType(mutable.Seq(
       StructField("taskID", StringType, nullable = false),
-      StructField("keywordNum",IntegerType,nullable = false),
-      StructField("messageNum",IntegerType,nullable = false),
-      StructField("startTime",StringType,nullable = false),
-      StructField("endTime",StringType,nullable = false),
-      StructField("elapsedTime",StringType,nullable = false)
+      StructField("keywordNum", IntegerType, nullable = false),
+      StructField("messageNum", IntegerType, nullable = false),
+      StructField("startTime", StringType, nullable = false),
+      StructField("endTime", StringType, nullable = false),
+      StructField("elapsedTime", StringType, nullable = false)
     ))
 
     val resultSchema: StructType = StructType(mutable.Seq(
@@ -113,13 +94,27 @@ object main {
       StructField("SumResult", IntegerType, nullable = false)
     ))
 
+    for (strate <- strategyContent) {
+      for (mess <- messageContent) {
+        if ((strate.r() findAllIn mess).nonEmpty) {
+          hitArray += 1
+        }
+      }
+      resultContent += (Row(taskInfo.getTaskID(), strate, hitArray.size))
+      hitArray.clear()
+    }
+    messContent += (Row(taskInfo.getTaskID(),
+      strategyContent.size,
+      messageContent.size,
+      taskInfo.getTime(),
+      taskInfo.getTime(),
+      String.valueOf(endStart - startTime) + "ms"))
+
     val taskMessRdd = session.sparkContext.makeRDD(messContent.toList)
     val resultRdd = session.sparkContext.makeRDD(resultContent.toList)
 
     val taskMessTable = session.sqlContext.createDataFrame(taskMessRdd, taskMessSchema)
     val resultTable = session.sqlContext.createDataFrame(resultRdd, resultSchema)
-
-
     taskMessTable.write.mode(SaveMode.Append).jdbc(configMess.getDBUrl(), "taskMessTable", configMess.getProp())
     resultTable.write.mode(SaveMode.Append).jdbc(configMess.getDBUrl(), "resultTable", configMess.getProp())
 

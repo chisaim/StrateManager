@@ -1,4 +1,4 @@
-package com.bjjh.MwssMan.mess
+package com.bjjh.MessMan.mess
 
 import java.text.SimpleDateFormat
 import java.util.Date

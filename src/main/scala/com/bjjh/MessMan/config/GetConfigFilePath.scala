@@ -1,4 +1,4 @@
-package com.bjjh.MwssMan.config
+package com.bjjh.MessMan.config
 
 class GetConfigFilePath {
 
@@ -9,11 +9,11 @@ class GetConfigFilePath {
 
   def getConfigPath() = {
 
-    getMainPath() + "\\conf"
+    getMainPath() + "/config"
   }
 
   def getLogPath() = {
-    getMainPath() + "\\log"
+    getMainPath() + "/log"
   }
   /*
     def getLibPath() = {

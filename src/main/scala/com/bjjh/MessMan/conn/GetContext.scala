@@ -1,6 +1,6 @@
-package com.bjjh.MwssMan.conn
+package com.bjjh.MessMan.conn
 
-import com.bjjh.MwssMan.config.{GetConfigFile, GetConfigMess}
+import com.bjjh.MessMan.config.{GetConfigFile, GetConfigMess}
 import org.apache.spark.sql.SparkSession
 
 class GetContext {

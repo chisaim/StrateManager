@@ -1,6 +1,6 @@
 package com.bjjh
 
-import com.bjjh.MwssMan.conn.GetContext
+import com.bjjh.MessMan.conn.GetContext
 import org.junit.Test
 
 import scala.collection.mutable.ArrayBuffer

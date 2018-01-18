@@ -1,6 +1,6 @@
 package com.bjjh
 
-import com.bjjh.MwssMan.config.{GetConfigFile, GetConfigFilePath, GetConfigMess}
+import com.bjjh.MessMan.config.{GetConfigFile, GetConfigFilePath, GetConfigMess}
 import org.junit.Test
 
 class TestGetConfigFilePath {

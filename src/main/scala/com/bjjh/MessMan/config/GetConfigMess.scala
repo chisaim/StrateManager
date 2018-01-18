@@ -1,4 +1,4 @@
-package com.bjjh.MwssMan.config
+package com.bjjh.MessMan.config
 
 import java.util.Properties
 import org.dom4j.{Document, Element}
