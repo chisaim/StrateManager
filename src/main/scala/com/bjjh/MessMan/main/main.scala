@@ -37,7 +37,7 @@ object main {
 
     val strategyContent = ArrayBuffer[String]()
     val messageContent = ArrayBuffer[String]()
-    val hitArray = ArrayBuffer[Int]()
+    //    val hitArray = ArrayBuffer[Int]()
 
     var resultContent = new ArrayBuffer[Row]()
     var messContent = new ArrayBuffer[Row]()
@@ -49,7 +49,12 @@ object main {
       messageContent += (message.getString(configMess.getTab2col()))
     }
 
-    val endStart = System.currentTimeMillis()
+    strategy.close()
+    message.close()
+    strategies.close()
+    messages.close()
+    conn.close()
+
     /*
         val data01 = session.read.jdbc(configMess.getDBUrl(), configMess.getTabName1(), configMess.getProp()).select(configMess.getTab1col())
         val data02 = session.read.jdbc(configMess.getDBUrl(), configMess.getTabName2(), configMess.getProp()).select(configMess.getTab2col())
@@ -89,19 +94,17 @@ object main {
     val resultSchema: StructType = StructType(mutable.Seq(
       StructField("taskID", StringType, nullable = false),
       StructField("keyword", StringType, nullable = false),
-      //      StructField("message", StringType, nullable = false),
+      StructField("message", StringType, nullable = false)
       //      StructField("hitResult", IntegerType, nullable = false),
-      StructField("SumResult", IntegerType, nullable = false)
+      //      StructField("SumResult", IntegerType, nullable = false)
     ))
 
     for (strate <- strategyContent) {
       for (mess <- messageContent) {
         if ((strate.r() findAllIn mess).nonEmpty) {
-          hitArray += 1
+          resultContent += (Row(taskInfo.getTaskID(), strate, mess))
         }
       }
-      resultContent += (Row(taskInfo.getTaskID(), strate, hitArray.size))
-      hitArray.clear()
     }
     messContent += (Row(taskInfo.getTaskID(),
       strategyContent.size,
@@ -117,6 +120,9 @@ object main {
     val resultTable = session.sqlContext.createDataFrame(resultRdd, resultSchema)
     taskMessTable.write.mode(SaveMode.Append).jdbc(configMess.getDBUrl(), "taskMessTable", configMess.getProp())
     resultTable.write.mode(SaveMode.Append).jdbc(configMess.getDBUrl(), "resultTable", configMess.getProp())
+
+    val endStart = System.currentTimeMillis()
+
 
     session.close()
 
