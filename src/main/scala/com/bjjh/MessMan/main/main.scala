@@ -106,6 +106,7 @@ object main {
         }
       }
     }
+    val endStart = System.currentTimeMillis()
     messContent += (Row(taskInfo.getTaskID(),
       strategyContent.size,
       messageContent.size,
@@ -121,7 +122,6 @@ object main {
     taskMessTable.write.mode(SaveMode.Append).jdbc(configMess.getDBUrl(), "taskMessTable", configMess.getProp())
     resultTable.write.mode(SaveMode.Append).jdbc(configMess.getDBUrl(), "resultTable", configMess.getProp())
 
-    val endStart = System.currentTimeMillis()
 
 
     session.close()
