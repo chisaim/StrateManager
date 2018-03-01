@@ -43,10 +43,10 @@ object main {
     var messContent = new ArrayBuffer[Row]()
 
     while (strategy.next()) {
-      strategyContent += (strategy.getString(configMess.getTab1col()))
+      strategyContent += strategy.getString(configMess.getTab1col())
     }
     while (message.next()) {
-      messageContent += (message.getString(configMess.getTab2col()))
+      messageContent += message.getString(configMess.getTab2col())
     }
 
     strategy.close()
@@ -102,17 +102,17 @@ object main {
     for (strate <- strategyContent) {
       for (mess <- messageContent) {
         if ((strate.r() findAllIn mess).nonEmpty) {
-          resultContent += (Row(taskInfo.getTaskID(), strate, mess))
+          resultContent += Row(taskInfo.getTaskID(), strate, mess)
         }
       }
     }
     val endStart = System.currentTimeMillis()
-    messContent += (Row(taskInfo.getTaskID(),
+    messContent += Row(taskInfo.getTaskID(),
       strategyContent.size,
       messageContent.size,
       taskInfo.getTime(),
       taskInfo.getTime(),
-      String.valueOf(endStart - startTime) + "ms"))
+      String.valueOf(endStart - startTime) + "ms")
 
     val taskMessRdd = session.sparkContext.makeRDD(messContent.toList)
     val resultRdd = session.sparkContext.makeRDD(resultContent.toList)

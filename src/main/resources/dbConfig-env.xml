@@ -6,7 +6,7 @@
     <dbPassword>chisaim</dbPassword>
     <!--The following location is configured to compare the table names and column names of the columns.-->
     <StrategyTab>customer</StrategyTab>
-    <StrategyTab-col>customer_name</StrategyTab-col>
+    <StrategyTab-col>contact_name</StrategyTab-col>
     <MessageTab>customer</MessageTab>
-    <MessageTab-col>customer_name</MessageTab-col>
+    <MessageTab-col>contact_name</MessageTab-col>
 </db-env>

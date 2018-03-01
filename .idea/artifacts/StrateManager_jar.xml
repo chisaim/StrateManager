@@ -162,7 +162,6 @@
       <element id="directory" name="script">
         <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/smbat.sh" />
       </element>
-      <element id="directory" name="log" />
     </root>
   </artifact>
 </component>
