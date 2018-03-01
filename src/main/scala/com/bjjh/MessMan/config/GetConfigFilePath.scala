@@ -9,7 +9,8 @@ class GetConfigFilePath {
 
   def getConfigPath() = {
 
-    getMainPath() + "/config"
+//    getMainPath() + "/config"
+    getMainPath() + "/src/main/resources"
   }
 
   def getLogPath() = {
